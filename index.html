@@ -1,9 +1,64 @@
 <html>
 <head>
-<title>CSS Icon Builder</title>
+	<title>CSS Icon Builder</title>
+
+	<script type="text/javascript">
+	var canvas;
+	var context;
+	var animationID;
+
+	var x = 30, y = 30;
+
+	var WIDTH = 600;
+	var HEIGHT = 600;
+
+	function start() {
+		canvas = document.getElementById("editor");
+		canvas.onmousedown = mouseDown;
+		canvas.onmouseup = mouseUp;
+		context = canvas.getContext("2d");
+		animationID = requestAnimationFrame(draw);
+	}
+
+	function draw() {
+		context.clearRect(0, 0, WIDTH, HEIGHT);
+		drawRect(x, y, "#5AE09E");
+		drawRect(100, 150, "#E07760");
+		animationID = requestAnimationFrame(draw);
+	}
+
+	function drawRect(x, y, color) {
+		context.fillStyle = color;
+		context.beginPath();
+		context.rect(x, y, 30, 30);
+		context.closePath();
+		context.fill();
+	}
+
+	function mouseDown(e) {
+		x = e.pageX - canvas.offsetLeft;
+		y = e.pageY - canvas.offsetTop;
+		canvas.onmousemove = mouseMove;
+	}
+
+	function mouseUp(e) {
+		canvas.onmousemove = null;
+	}
+
+	function mouseMove(e) {
+		x = e.pageX - canvas.offsetLeft;
+		y = e.pageY - canvas.offsetTop;
+	}
+	</script>
 </head>
 
 <body>
+	<canvas id="editor" width="600" height="600">
+		Your browser doesn't support HTML5 canvas.
+	</canvas>
+	<script type="text/javascript">
+	start();
+	</script>
 </body>
 
 </html>
