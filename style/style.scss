@@ -1,0 +1,49 @@
+$themeColor: #48B8E0;
+$themeColorDark: #46A7DA;
+$themeColorDarker: #3984BE;
+
+$black: #111;
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+:root {
+	font-size: 16px;
+	background-color: $black;
+}
+
+header {
+	position: relative;
+	width: 100%;
+	height: 6rem;
+	padding: 0 3rem;
+
+	background-color: $themeColor;
+	border-bottom: $themeColorDark 2px solid;
+	box-shadow: 0 0 2px $black;
+	z-index: 100;
+
+	h1 {
+		line-height: 6rem;
+	}
+}
+
+nav {
+	position: relative;
+	width: 100%;
+	height: 3rem;
+	padding: 0 3rem;
+
+	background-color: $themeColorDark;
+	border-bottom: $themeColorDarker 2px solid;
+	z-index: 90;
+}
+
+aside {
+	position: relative;
+	height: calc(100% - 9rem);
+	float: right;
+}
