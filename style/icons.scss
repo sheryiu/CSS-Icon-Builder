@@ -1,0 +1,16 @@
+i[class*="icon"] {
+	display: inline-block;
+	font-size: 1.5rem;
+
+	&.tool_icon_rectangle {
+		width: 1em;
+		height: 1em;
+		background-color: white;
+	}
+	&.tool_icon_circle {
+		width: 1em;
+		height: 1em;
+		background-color: white;
+		border-radius: 50%;
+	}
+}

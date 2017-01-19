@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,gBAAiB,CAChB,OAAO,CAAE,YAAY,CACrB,SAAS,CAAE,MAAM,CAEjB,oCAAsB,CACrB,KAAK,CAAE,GAAG,CACV,MAAM,CAAE,GAAG,CACX,gBAAgB,CAAE,KAAK,CAExB,iCAAmB,CAClB,KAAK,CAAE,GAAG,CACV,MAAM,CAAE,GAAG,CACX,gBAAgB,CAAE,KAAK,CACvB,aAAa,CAAE,GAAG",
+"sources": ["icons.scss"],
+"names": [],
+"file": "icons.css"
+}
