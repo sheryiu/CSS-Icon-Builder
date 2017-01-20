@@ -17,6 +17,7 @@
 		canvas = document.getElementById("editor");
 		canvas.onmousedown = mouseDown;
 		canvas.onmouseup = mouseUp;
+		canvas.onmousemove = mouseMove;
 		context = canvas.getContext("2d");
 		drawCorner();
 		drawHorizontalRuler();
@@ -28,18 +29,57 @@
 		context.clearRect(20, 20, WIDTH, HEIGHT);
 		drawRect(x, y, "#5AE09E");
 		drawRect(100, 150, "#E07760");
+
+		// Cursor Crosshairs
+		context.strokeStyle = "#444";
+		context.beginPath();
+		context.moveTo(20, y);
+		context.lineTo(20+WIDTH, y);
+		context.moveTo(x, 20);
+		context.lineTo(x, 20+HEIGHT);
+		context.stroke();
+
 		animationID = requestAnimationFrame(draw);
 	}
+
+	function drawRect(x, y, color) {
+		context.fillStyle = color;
+		context.beginPath();
+		context.rect(x, y, 100, 30);
+		context.fill();
+	}
+
+	function mouseDown(e) {
+		//x = e.pageX - canvas.offsetLeft;
+		//y = e.pageY - canvas.offsetTop;
+	}
+
+	function mouseUp(e) {
+	}
+
+	function mouseMove(e) {
+		if (e.pageX > canvas.offsetLeft+20) {
+			x = e.pageX - canvas.offsetLeft;
+		}
+		if (e.pageY > canvas.offsetTop+20) {
+			y = e.pageY - canvas.offsetTop;
+		}
+	}
+
+
+
+
+
+
+
 
 	function drawHorizontalRuler() {
 		context.fillStyle = "#222";
 		context.beginPath();
 		context.rect(20, 0, WIDTH, 20);
-		context.closePath();
 		context.fill();
 
 		context.strokeStyle = "#999";
-		context.lineWidth = 1;
 		context.beginPath();
 		for (var i = 0; i <= 10; i++) {
 			// Full Bar
@@ -68,11 +108,9 @@
 		context.fillStyle = "#222";
 		context.beginPath();
 		context.rect(0, 20, 20, HEIGHT);
-		context.closePath();
 		context.fill();
 
 		context.strokeStyle = "#999";
-		context.lineWidth = 1;
 		context.beginPath();
 		for (var i = 0; i <= 10; i++) {
 			// Full Bar
@@ -104,31 +142,7 @@
 		context.fillStyle = "#222";
 		context.beginPath();
 		context.rect(0, 0, 20, 20);
-		context.closePath();
 		context.fill();
-	}
-
-	function drawRect(x, y, color) {
-		context.fillStyle = color;
-		context.beginPath();
-		context.rect(x, y, 100, 30);
-		context.closePath();
-		context.fill();
-	}
-
-	function mouseDown(e) {
-		x = e.pageX - canvas.offsetLeft;
-		y = e.pageY - canvas.offsetTop;
-		canvas.onmousemove = mouseMove;
-	}
-
-	function mouseUp(e) {
-		canvas.onmousemove = null;
-	}
-
-	function mouseMove(e) {
-		x = e.pageX - canvas.offsetLeft;
-		y = e.pageY - canvas.offsetTop;
 	}
 	</script>
 </head>
