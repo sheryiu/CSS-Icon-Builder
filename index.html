@@ -2,6 +2,7 @@
 <head>
 	<title>CSS Icon Builder</title>
 	<link rel="stylesheet" href="./style/style.css" type="text/css"/>
+	<link rel="stylesheet" href="./style/icons.css" type="text/css"/>
 	<script type="text/javascript">
 	var canvas;
 	var context;
@@ -17,14 +18,41 @@
 		canvas.onmousedown = mouseDown;
 		canvas.onmouseup = mouseUp;
 		context = canvas.getContext("2d");
+		drawHorizontalRuler();
+		drawVerticalRuler();
+		drawCorner();
 		animationID = requestAnimationFrame(draw);
 	}
 
 	function draw() {
-		context.clearRect(0, 0, WIDTH, HEIGHT);
+		context.clearRect(20, 20, WIDTH, HEIGHT);
 		drawRect(x, y, "#5AE09E");
 		drawRect(100, 150, "#E07760");
 		animationID = requestAnimationFrame(draw);
+	}
+
+	function drawHorizontalRuler() {
+		context.fillStyle = "#222";
+		context.beginPath();
+		context.rect(20, 0, WIDTH, 20);
+		context.closePath();
+		context.fill();
+	}
+
+	function drawVerticalRuler() {
+		context.fillStyle = "#222";
+		context.beginPath();
+		context.rect(0, 20, 20, HEIGHT);
+		context.closePath();
+		context.fill();
+	}
+
+	function drawCorner() {
+		context.fillStyle = "#222";
+		context.beginPath();
+		context.rect(0, 0, 20, 20);
+		context.closePath();
+		context.fill();
 	}
 
 	function drawRect(x, y, color) {
@@ -67,9 +95,11 @@
 		<div title="Circle"><i class="tool_icon_circle"></i></div>
 	</aside>
 
-	<canvas id="editor" width="600" height="600">
-		Your browser doesn't support HTML5 canvas.
-	</canvas>
+	<div class="centerArea">
+		<canvas id="editor" width="620" height="620">
+			Your browser doesn't support HTML5 canvas.
+		</canvas>
+	</div>
 
 	<aside class="layers">
 		<h2>Layers</h2>

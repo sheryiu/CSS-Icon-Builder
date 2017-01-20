@@ -2,13 +2,13 @@ $themeColor: #48B8E0;
 $themeColorDark: #46A7DA;
 $themeColorDarker: #3984BE;
 
-$black: #111;
-$darkgrey: #232323;
-$grey: #444;
+$background: #444;
+$asideBackground: #333;
 
 $HEADER_HEIGHT: 6rem;
 $TOOLBAR_HEIGHT: 3rem;
 $TOOLS_WIDTH: 4rem;
+$LAYERS_WIDTH: 20rem;
 
 * {
 	margin: 0;
@@ -18,7 +18,7 @@ $TOOLS_WIDTH: 4rem;
 
 :root {
 	font-size: 16px;
-	background-color: $black;
+	background-color: $background;
 }
 
 header {
@@ -29,7 +29,7 @@ header {
 
 	background-color: $themeColor;
 	border-bottom: $themeColorDark 2px solid;
-	box-shadow: 0 0 2px $black;
+	box-shadow: 0 0 2px $background;
 	z-index: 100;
 
 	h1 {
@@ -73,9 +73,8 @@ aside.tools {
 	width: $TOOLS_WIDTH;
 	height: calc(100% - #{$HEADER_HEIGHT} - #{$TOOLBAR_HEIGHT});
 	float: left;
-	padding: 0 0.5rem;
 
-	background-color: $grey;
+	background-color: $asideBackground;
 
 	color: white;
 
@@ -96,27 +95,34 @@ aside.tools {
 
 aside.layers {
 	position: relative;
-	width: 20rem;
+	width: $LAYERS_WIDTH;
 	height: calc(100% - #{$HEADER_HEIGHT} - #{$TOOLBAR_HEIGHT});
 	float: right;
 
-	background-color: $grey;
+	background-color: $asideBackground;
 
 	color: white;
 
 	h2 {
 		padding: 1rem 1rem;
 
-		border-bottom: $black 1px solid;
+		border-bottom: black 1px solid;
 	}
 
 	div {
 		padding: 0.5rem 1rem;
 
-		border-bottom: $black 1px solid;
+		border-bottom: black 1px solid;
 	}
 }
 
-canvas {
-	background-color: $darkgrey;
+.centerArea {
+	width: calc(100% - #{$TOOLS_WIDTH} - #{$LAYERS_WIDTH});
+	float: left;
+
+	text-align: center;
+
+	canvas {
+		background-color: white;
+	}
 }
