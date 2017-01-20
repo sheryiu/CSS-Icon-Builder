@@ -117,10 +117,12 @@ aside.layers {
 }
 
 .centerArea {
+	display: flex;
 	width: calc(100% - #{$TOOLS_WIDTH} - #{$LAYERS_WIDTH});
+	height: calc(100% - #{$HEADER_HEIGHT} - #{$TOOLBAR_HEIGHT});
+	align-items: center;
+    justify-content: center;
 	float: left;
-
-	text-align: center;
 
 	canvas {
 		background-color: white;
