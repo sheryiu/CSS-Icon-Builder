@@ -10,17 +10,17 @@
 
 	var x = 30, y = 30;
 
-	var WIDTH = 600;
-	var HEIGHT = 600;
+	var WIDTH = 500;
+	var HEIGHT = 500;
 
 	function start() {
 		canvas = document.getElementById("editor");
 		canvas.onmousedown = mouseDown;
 		canvas.onmouseup = mouseUp;
 		context = canvas.getContext("2d");
+		drawCorner();
 		drawHorizontalRuler();
 		drawVerticalRuler();
-		drawCorner();
 		animationID = requestAnimationFrame(draw);
 	}
 
@@ -37,6 +37,31 @@
 		context.rect(20, 0, WIDTH, 20);
 		context.closePath();
 		context.fill();
+
+		context.strokeStyle = "#999";
+		context.lineWidth = 1;
+		context.beginPath();
+		for (var i = 0; i <= 10; i++) {
+			// Full Bar
+			context.moveTo(20 + i*WIDTH/10, 0);
+			context.lineTo(20 + i*WIDTH/10, 20);
+			// Half Bar
+			context.moveTo(20 + (i+0.5)*HEIGHT/10, 10);
+			context.lineTo(20 + (i+0.5)*HEIGHT/10, 20);
+			// Quarter Bar
+			context.moveTo(20 + (i+0.25)*HEIGHT/10, 15);
+			context.lineTo(20 + (i+0.25)*HEIGHT/10, 20);
+			context.moveTo(20 + (i+0.75)*HEIGHT/10, 15);
+			context.lineTo(20 + (i+0.75)*HEIGHT/10, 20);
+		}
+		context.stroke();
+
+		context.fillStyle = "#999";
+		context.font = "12px Arial";
+		for (var i = 0; i < 10; i++) {
+			var temp = "0" + (i>0?("."+i):"");
+			context.fillText(temp, 25 + i*WIDTH/10, 12);
+		}
 	}
 
 	function drawVerticalRuler() {
@@ -45,6 +70,34 @@
 		context.rect(0, 20, 20, HEIGHT);
 		context.closePath();
 		context.fill();
+
+		context.strokeStyle = "#999";
+		context.lineWidth = 1;
+		context.beginPath();
+		for (var i = 0; i <= 10; i++) {
+			// Full Bar
+			context.moveTo(0, 20 + i*HEIGHT/10);
+			context.lineTo(20, 20 + i*HEIGHT/10);
+			// Half Bar
+			context.moveTo(10, 20 + (i+0.5)*HEIGHT/10);
+			context.lineTo(20, 20 + (i+0.5)*HEIGHT/10);
+			// Quarter Bar
+			context.moveTo(15, 20 + (i+0.25)*HEIGHT/10);
+			context.lineTo(20, 20 + (i+0.25)*HEIGHT/10);
+			context.moveTo(15, 20 + (i+0.75)*HEIGHT/10);
+			context.lineTo(20, 20 + (i+0.75)*HEIGHT/10);
+		}
+		context.stroke();
+
+		context.save();
+		context.rotate(90*Math.PI/180);
+		context.fillStyle = "#999";
+		context.font = "12px Arial";
+		for (var i = 0; i < 10; i++) {
+			var temp = "0" + (i>0?("."+i):"");
+			context.fillText(temp, 25 + i*WIDTH/10, -2);
+		}
+		context.restore();
 	}
 
 	function drawCorner() {
@@ -58,7 +111,7 @@
 	function drawRect(x, y, color) {
 		context.fillStyle = color;
 		context.beginPath();
-		context.rect(x, y, 30, 30);
+		context.rect(x, y, 100, 30);
 		context.closePath();
 		context.fill();
 	}
@@ -96,7 +149,7 @@
 	</aside>
 
 	<div class="centerArea">
-		<canvas id="editor" width="620" height="620">
+		<canvas id="editor" width="520" height="520">
 			Your browser doesn't support HTML5 canvas.
 		</canvas>
 	</div>
