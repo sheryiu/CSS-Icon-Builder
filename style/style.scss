@@ -4,6 +4,7 @@ $themeColorDarker: #3984BE;
 
 $background: #444;
 $asideBackground: #333;
+$shadowBackground: #111;
 
 $HEADER_HEIGHT: 6rem;
 $TOOLBAR_HEIGHT: 3rem;
@@ -29,7 +30,7 @@ header {
 
 	background-color: $themeColor;
 	border-bottom: $themeColorDark 2px solid;
-	box-shadow: 0 0 2px $background;
+	box-shadow: 0 0 2px $shadowBackground;
 	z-index: 100;
 
 	h1 {
@@ -75,6 +76,7 @@ aside.tools {
 	float: left;
 
 	background-color: $asideBackground;
+	box-shadow: 0 0 2px $shadowBackground;
 
 	color: white;
 
@@ -99,8 +101,6 @@ aside.panels {
 	//height: calc(100% - #{$HEADER_HEIGHT} - #{$TOOLBAR_HEIGHT});
 	float: right;
 
-	background-color: $asideBackground;
-
 	color: white;
 
 	h2 {
@@ -110,9 +110,11 @@ aside.panels {
 	}
 
 	section {
-		border-bottom: $background 12px solid;
+		background-color: $asideBackground;
+		box-shadow: 0 0 2px $shadowBackground;
 
 		&#layers {
+			margin-bottom: 1rem;
 			div {
 				padding: 0.5rem 1rem;
 

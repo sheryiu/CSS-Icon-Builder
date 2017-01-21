@@ -74,10 +74,16 @@
 			context.strokeStyle = "#48B8E0";
 			context.fillStyle = "#FFF";
 			context.beginPath();
+			// Corner Anchors
 			context.rect(RULER_SIZE+mainData.position.x-3, RULER_SIZE+mainData.position.y-3, 6, 6);
 			context.rect(RULER_SIZE+mainData.position.x+mainData.size.x-3, RULER_SIZE+mainData.position.y-3, 6, 6);
 			context.rect(RULER_SIZE+mainData.position.x-3, RULER_SIZE+mainData.position.y+mainData.size.y-3, 6, 6);
 			context.rect(RULER_SIZE+mainData.position.x+mainData.size.x-3, RULER_SIZE+mainData.position.y+mainData.size.y-3, 6, 6);
+			// Size Anchors
+			context.rect(RULER_SIZE+mainData.position.x+mainData.size.x/2-3, RULER_SIZE+mainData.position.y-3, 6, 6);
+			context.rect(RULER_SIZE+mainData.position.x+mainData.size.x/2-3, RULER_SIZE+mainData.position.y+mainData.size.y-3, 6, 6);
+			context.rect(RULER_SIZE+mainData.position.x-3, RULER_SIZE+mainData.position.y+mainData.size.y/2-3, 6, 6);
+			context.rect(RULER_SIZE+mainData.position.x+mainData.size.x-3, RULER_SIZE+mainData.position.y+mainData.size.y/2-3, 6, 6);
 			context.fill();
 			context.stroke();
 		}
