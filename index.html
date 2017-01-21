@@ -3,6 +3,7 @@
 	<title>CSS Icon Builder</title>
 	<link rel="stylesheet" href="./style/style.css" type="text/css"/>
 	<link rel="stylesheet" href="./style/icons.css" type="text/css"/>
+	<link rel="stylesheet" href="./style/input.css" type="text/css"/>
 	<script type="text/javascript" src="./script/ruleCross.js"></script>
 	<script type="text/javascript">
 	var canvas;
@@ -123,10 +124,14 @@
 		//TODO fixed when out of border (should allow)
 		if (clickDown) {
 			if (currClickShape != null) {
-				if (x+xOffset >= 0)
-				iconData[currClickShape].position.x = x+xOffset;
-				if (y+yOffset >= 0)
-				iconData[currClickShape].position.y = y+yOffset;
+				if (x+xOffset >= 0) {
+					iconData[currClickShape].position.x = x+xOffset;
+					document.getElementById("posX").value = (x+xOffset)/WIDTH + "em";
+				}
+				if (y+yOffset >= 0) {
+					iconData[currClickShape].position.y = y+yOffset;
+					document.getElementById("posY").value = (y+yOffset)/HEIGHT + "em";
+				}
 			}
 		}
 	}
@@ -178,7 +183,10 @@
 		<section id="properties">
 			<h2>Properties</h2>
 			<div>
-				<label for="posX">X:</label><input type="number" id="posX"/>
+				<label for="posX">X:</label><input type="text" id="posX"/>
+				<label for="posY">Y:</label><input type="text" id="posY"/><br/>
+				<label for="sizeX">W:</label><input type="text" id="sizeX"/>
+				<label for="sizeY">H:</label><input type="text" id="sizeY"/>
 			</div>
 		</section>
 	</aside>
