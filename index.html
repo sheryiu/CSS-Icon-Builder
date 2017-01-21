@@ -3,21 +3,36 @@
 	<title>CSS Icon Builder</title>
 	<link rel="stylesheet" href="./style/style.css" type="text/css"/>
 	<link rel="stylesheet" href="./style/icons.css" type="text/css"/>
+	<script type="text/javascript" src="./script/ruleCross.js"></script>
 	<script type="text/javascript">
 	var canvas;
 	var context;
 	var animationID;
 
-	var x = 30, y = 30;
+	var iconData = {
+		"main":{
+			"baseShape":"rectangle",
+			"borderRadius":0,
+			"position": {"x":20, "y":20},
+			"size": {"x":200, "y":100}
+		},
+		"before":{},
+		"after":{}
+	};
+
+	var x, y;
+	var clickDown = false;
 
 	var WIDTH = 500;
 	var HEIGHT = 500;
+	var RULER_SIZE = 20;
 
 	function start() {
 		canvas = document.getElementById("editor");
 		canvas.onmousedown = mouseDown;
 		canvas.onmouseup = mouseUp;
 		canvas.onmousemove = mouseMove;
+		canvas.onmouseout = mouseOut;
 		context = canvas.getContext("2d");
 		drawCorner();
 		drawHorizontalRuler();
@@ -26,44 +41,69 @@
 	}
 
 	function draw() {
-		context.clearRect(20, 20, WIDTH, HEIGHT);
-		drawRect(x, y, "#5AE09E");
-		drawRect(100, 150, "#E07760");
+		context.clearRect(RULER_SIZE, RULER_SIZE, WIDTH, HEIGHT);
+		/*if (clickDown) {
+			drawRect(x, y, "#5AE09E");
+		} else {
+			drawRect(xBox, yBox, "#5AE09E");
+		}*/
 
-		// Cursor Crosshairs
-		context.strokeStyle = "#444";
-		context.beginPath();
-		context.moveTo(20, y);
-		context.lineTo(20+WIDTH, y);
-		context.moveTo(x, 20);
-		context.lineTo(x, 20+HEIGHT);
-		context.stroke();
+		drawIconMain();
+		drawCrosshairs();
 
 		animationID = requestAnimationFrame(draw);
 	}
 
-	function drawRect(x, y, color) {
+
+	function drawIconMain() {
+		var mainData = iconData.main;
+		if (mainData.baseShape == "rectangle") {
+			if (mainData.borderRadius == 0) {
+				context.fillStyle = "#000";
+				context.beginPath();
+				context.rect(RULER_SIZE+mainData.position.x, RULER_SIZE+mainData.position.y, mainData.size.x, mainData.size.y);
+				context.fill();
+			}
+		}
+	}
+
+	/*function drawRect(x, y, color) {
 		context.fillStyle = color;
 		context.beginPath();
 		context.rect(x, y, 100, 30);
 		context.fill();
-	}
+	}*/
+
+
+
 
 	function mouseDown(e) {
-		//x = e.pageX - canvas.offsetLeft;
-		//y = e.pageY - canvas.offsetTop;
+		clickDown = true;
+		mouseMove(e);
 	}
 
 	function mouseUp(e) {
+		clickDown = false;
+		mouseMove(e);
 	}
 
 	function mouseMove(e) {
-		if (e.pageX > canvas.offsetLeft+20) {
+		if (e.pageX-canvas.offsetLeft >= RULER_SIZE) {
 			x = e.pageX - canvas.offsetLeft;
+		} else {
+			x = RULER_SIZE;
 		}
-		if (e.pageY > canvas.offsetTop+20) {
+		if (e.pageY-canvas.offsetTop >= RULER_SIZE) {
 			y = e.pageY - canvas.offsetTop;
+		} else {
+			y = RULER_SIZE;
 		}
+	}
+
+	function mouseOut(e) {
+		clickDown = false;
+		x = RULER_SIZE;
+		y = RULER_SIZE;
 	}
 
 
@@ -73,77 +113,7 @@
 
 
 
-	function drawHorizontalRuler() {
-		context.fillStyle = "#222";
-		context.beginPath();
-		context.rect(20, 0, WIDTH, 20);
-		context.fill();
 
-		context.strokeStyle = "#999";
-		context.beginPath();
-		for (var i = 0; i <= 10; i++) {
-			// Full Bar
-			context.moveTo(20 + i*WIDTH/10, 0);
-			context.lineTo(20 + i*WIDTH/10, 20);
-			// Half Bar
-			context.moveTo(20 + (i+0.5)*HEIGHT/10, 10);
-			context.lineTo(20 + (i+0.5)*HEIGHT/10, 20);
-			// Quarter Bar
-			context.moveTo(20 + (i+0.25)*HEIGHT/10, 15);
-			context.lineTo(20 + (i+0.25)*HEIGHT/10, 20);
-			context.moveTo(20 + (i+0.75)*HEIGHT/10, 15);
-			context.lineTo(20 + (i+0.75)*HEIGHT/10, 20);
-		}
-		context.stroke();
-
-		context.fillStyle = "#999";
-		context.font = "12px Arial";
-		for (var i = 0; i < 10; i++) {
-			var temp = "0" + (i>0?("."+i):"");
-			context.fillText(temp, 25 + i*WIDTH/10, 12);
-		}
-	}
-
-	function drawVerticalRuler() {
-		context.fillStyle = "#222";
-		context.beginPath();
-		context.rect(0, 20, 20, HEIGHT);
-		context.fill();
-
-		context.strokeStyle = "#999";
-		context.beginPath();
-		for (var i = 0; i <= 10; i++) {
-			// Full Bar
-			context.moveTo(0, 20 + i*HEIGHT/10);
-			context.lineTo(20, 20 + i*HEIGHT/10);
-			// Half Bar
-			context.moveTo(10, 20 + (i+0.5)*HEIGHT/10);
-			context.lineTo(20, 20 + (i+0.5)*HEIGHT/10);
-			// Quarter Bar
-			context.moveTo(15, 20 + (i+0.25)*HEIGHT/10);
-			context.lineTo(20, 20 + (i+0.25)*HEIGHT/10);
-			context.moveTo(15, 20 + (i+0.75)*HEIGHT/10);
-			context.lineTo(20, 20 + (i+0.75)*HEIGHT/10);
-		}
-		context.stroke();
-
-		context.save();
-		context.rotate(90*Math.PI/180);
-		context.fillStyle = "#999";
-		context.font = "12px Arial";
-		for (var i = 0; i < 10; i++) {
-			var temp = "0" + (i>0?("."+i):"");
-			context.fillText(temp, 25 + i*WIDTH/10, -2);
-		}
-		context.restore();
-	}
-
-	function drawCorner() {
-		context.fillStyle = "#222";
-		context.beginPath();
-		context.rect(0, 0, 20, 20);
-		context.fill();
-	}
 	</script>
 </head>
 
