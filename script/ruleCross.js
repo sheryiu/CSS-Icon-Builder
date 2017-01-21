@@ -72,16 +72,16 @@ function drawCorner() {
 
 function drawCrosshairs() {
 	// Cursor Crosshairs
-	if (x > RULER_SIZE || y > RULER_SIZE) {
+	if (x > 0 || y > 0) {
 		context.strokeStyle = "#444";
 		context.beginPath();
-		if (y > RULER_SIZE) {
-			context.moveTo(RULER_SIZE, y);
-			context.lineTo(RULER_SIZE+WIDTH, y);
+		if (y > 0) {
+			context.moveTo(RULER_SIZE, y+RULER_SIZE);
+			context.lineTo(RULER_SIZE+WIDTH, y+RULER_SIZE);
 		}
-		if (x > RULER_SIZE) {
-			context.moveTo(x, RULER_SIZE);
-			context.lineTo(x, RULER_SIZE+HEIGHT);
+		if (x > 0) {
+			context.moveTo(x+RULER_SIZE, RULER_SIZE);
+			context.lineTo(x+RULER_SIZE, RULER_SIZE+HEIGHT);
 		}
 		context.stroke();
 	}

@@ -21,7 +21,11 @@
 	};
 
 	var x, y;
+	var xOffset, yOffset;
 	var clickDown = false;
+	// 0 = main, 1 = before, 2 = after
+	var currLayer = 0;
+	var currClickShape;
 
 	var WIDTH = 500;
 	var HEIGHT = 500;
@@ -65,6 +69,17 @@
 				context.fill();
 			}
 		}
+		if (currClickShape == "main") {
+			context.strokeStyle = "#48B8E0";
+			context.fillStyle = "#FFF";
+			context.beginPath();
+			context.rect(RULER_SIZE+mainData.position.x-3, RULER_SIZE+mainData.position.y-3, 6, 6);
+			context.rect(RULER_SIZE+mainData.position.x+mainData.size.x-3, RULER_SIZE+mainData.position.y-3, 6, 6);
+			context.rect(RULER_SIZE+mainData.position.x-3, RULER_SIZE+mainData.position.y+mainData.size.y-3, 6, 6);
+			context.rect(RULER_SIZE+mainData.position.x+mainData.size.x-3, RULER_SIZE+mainData.position.y+mainData.size.y-3, 6, 6);
+			context.fill();
+			context.stroke();
+		}
 	}
 
 	/*function drawRect(x, y, color) {
@@ -79,34 +94,47 @@
 
 	function mouseDown(e) {
 		clickDown = true;
+		if (currLayer == 0) {
+			var mainData = iconData.main;
+			context.beginPath();
+			context.rect(RULER_SIZE+mainData.position.x, RULER_SIZE+mainData.position.y, mainData.size.x, mainData.size.y);
+			if (context.isPointInPath(e.pageX-canvas.offsetLeft, e.pageY-canvas.offsetTop)) {
+				currClickShape = "main";
+				xOffset = (RULER_SIZE+mainData.position.x) - (e.pageX-canvas.offsetLeft);
+				yOffset = (RULER_SIZE+mainData.position.y) - (e.pageY-canvas.offsetTop);
+			}
+		}
 		mouseMove(e);
 	}
 
 	function mouseUp(e) {
 		clickDown = false;
+		currClickShape = null;
 		mouseMove(e);
 	}
 
 	function mouseMove(e) {
 		if (e.pageX-canvas.offsetLeft >= RULER_SIZE) {
-			x = e.pageX - canvas.offsetLeft;
+			x = e.pageX - canvas.offsetLeft - RULER_SIZE;
 		} else {
-			x = RULER_SIZE;
+			x = 0;
 		}
 		if (e.pageY-canvas.offsetTop >= RULER_SIZE) {
-			y = e.pageY - canvas.offsetTop;
+			y = e.pageY - canvas.offsetTop - RULER_SIZE;
 		} else {
-			y = RULER_SIZE;
+			y = 0;
+		}
+		if (currClickShape != null) {
+			iconData[currClickShape].position.x = x+xOffset;
+			iconData[currClickShape].position.y = y+yOffset;
 		}
 	}
 
 	function mouseOut(e) {
 		clickDown = false;
-		x = RULER_SIZE;
-		y = RULER_SIZE;
+		x = 0;
+		y = 0;
 	}
-
-
 
 
 
