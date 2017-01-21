@@ -127,19 +127,33 @@ aside.panels {
 		}
 
 		&#properties {
+			padding-bottom: 1rem;
 			div {
-				padding: 1rem 1rem;
+				padding: 1rem 1rem 0 1rem;
 			}
 
-			label {
-				display: inline-block;
-				width: 10%;
+			.posSize {
+				label {
+					display: inline-block;
+					width: 10%;
+				}
+
+				input {
+					width: 33%;
+					margin-right: 1rem;
+					margin-bottom: 0.25rem;
+				}
 			}
 
-			input {
-				width: 33%;
-				margin-right: 1rem;
-				margin-bottom: 0.25rem;
+			.color {
+				label {
+					display: inline-block;
+					width: 40%;
+				}
+
+				input {
+					margin-bottom: 0.25rem;
+				}
 			}
 		}
 	}
