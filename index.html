@@ -102,6 +102,10 @@
 				currClickShape = "main";
 				xOffset = (RULER_SIZE+mainData.position.x) - (e.pageX-canvas.offsetLeft);
 				yOffset = (RULER_SIZE+mainData.position.y) - (e.pageY-canvas.offsetTop);
+			} else {
+				currClickShape = null;
+				xOffset = 0;
+				yOffset = 0;
 			}
 		}
 		mouseMove(e);
@@ -109,24 +113,21 @@
 
 	function mouseUp(e) {
 		clickDown = false;
-		currClickShape = null;
 		mouseMove(e);
 	}
 
 	function mouseMove(e) {
-		if (e.pageX-canvas.offsetLeft >= RULER_SIZE) {
-			x = e.pageX - canvas.offsetLeft - RULER_SIZE;
-		} else {
-			x = 0;
-		}
-		if (e.pageY-canvas.offsetTop >= RULER_SIZE) {
-			y = e.pageY - canvas.offsetTop - RULER_SIZE;
-		} else {
-			y = 0;
-		}
-		if (currClickShape != null) {
-			iconData[currClickShape].position.x = x+xOffset;
-			iconData[currClickShape].position.y = y+yOffset;
+		x = e.pageX - canvas.offsetLeft - RULER_SIZE;
+		y = e.pageY - canvas.offsetTop - RULER_SIZE;
+
+		//TODO fixed when out of border (should allow)
+		if (clickDown) {
+			if (currClickShape != null) {
+				if (x+xOffset >= 0)
+				iconData[currClickShape].position.x = x+xOffset;
+				if (y+yOffset >= 0)
+				iconData[currClickShape].position.y = y+yOffset;
+			}
 		}
 	}
 
@@ -166,11 +167,20 @@
 		</canvas>
 	</div>
 
-	<aside class="layers">
-		<h2>Layers</h2>
-		<div>Main Layer</div>
-		<div>:before Layer</div>
-		<div>:after Layer</div>
+	<aside class="panels">
+		<section id="layers">
+			<h2>Layers</h2>
+			<div>Main Layer</div>
+			<div>:before Layer</div>
+			<div>:after Layer</div>
+		</section>
+
+		<section id="properties">
+			<h2>Properties</h2>
+			<div>
+				<label for="posX">X:</label><input type="number" id="posX"/>
+			</div>
+		</section>
 	</aside>
 
 	<script type="text/javascript">

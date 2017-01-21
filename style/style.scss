@@ -93,10 +93,10 @@ aside.tools {
 	}
 }
 
-aside.layers {
+aside.panels {
 	position: relative;
 	width: $LAYERS_WIDTH;
-	height: calc(100% - #{$HEADER_HEIGHT} - #{$TOOLBAR_HEIGHT});
+	//height: calc(100% - #{$HEADER_HEIGHT} - #{$TOOLBAR_HEIGHT});
 	float: right;
 
 	background-color: $asideBackground;
@@ -109,10 +109,26 @@ aside.layers {
 		border-bottom: black 1px solid;
 	}
 
-	div {
-		padding: 0.5rem 1rem;
+	section {
+		border-bottom: $background 12px solid;
 
-		border-bottom: black 1px solid;
+		&#layers {
+			div {
+				padding: 0.5rem 1rem;
+
+				border-bottom: black 1px solid;
+
+				&:last-child {
+					border-bottom: none;
+				}
+			}
+		}
+
+		&#properties {
+			div {
+				padding: 1rem 1rem;
+			}
+		}
 	}
 }
 
@@ -121,7 +137,7 @@ aside.layers {
 	width: calc(100% - #{$TOOLS_WIDTH} - #{$LAYERS_WIDTH});
 	height: calc(100% - #{$HEADER_HEIGHT} - #{$TOOLBAR_HEIGHT});
 	align-items: center;
-    justify-content: center;
+	justify-content: center;
 	float: left;
 
 	canvas {
