@@ -137,6 +137,10 @@
 					currAnchorPos = null;
 					xOffset = 0;
 					yOffset = 0;
+					document.getElementById("posX").value = "";
+					document.getElementById("posY").value = "";
+					document.getElementById("sizeX").value = "";
+					document.getElementById("sizeY").value = "";
 				}
 			}
 		}
@@ -234,6 +238,52 @@
 		y = 0;
 	}
 
+
+	function changePosX(value) {
+		if (value.indexOf("em") >= 0) {
+			value = value.substr(0, value.indexOf("em"))*WIDTH;
+			if (currLayer == 0) {
+				if (currClickShape == "main") {
+					xDelta = value - iconData.main.position.x;
+					mouseUp();
+				}
+			}
+		}
+	}
+	function changePosY(value) {
+		if (value.indexOf("em") >= 0) {
+			value = value.substr(0, value.indexOf("em"))*HEIGHT;
+			if (currLayer == 0) {
+				if (currClickShape == "main") {
+					yDelta = value - iconData.main.position.y;
+					mouseUp();
+				}
+			}
+		}
+	}
+	function changeSizeX(value) {
+		if (value.indexOf("em") >= 0) {
+			value = value.substr(0, value.indexOf("em"))*WIDTH;
+			if (currLayer == 0) {
+				if (currClickShape == "main") {
+					wDelta = value - iconData.main.size.x;
+					mouseUp();
+				}
+			}
+		}
+	}
+	function changeSizeY(value) {
+		if (value.indexOf("em") >= 0) {
+			value = value.substr(0, value.indexOf("em"))*HEIGHT;
+			if (currLayer == 0) {
+				if (currClickShape == "main") {
+					hDelta = value - iconData.main.size.y;
+					mouseUp();
+				}
+			}
+		}
+	}
+
 	</script>
 </head>
 
@@ -269,10 +319,10 @@
 		<section id="properties">
 			<h2>Properties</h2>
 			<div class="posSize">
-				<label for="posX">X:</label><input type="text" id="posX"/>
-				<label for="posY">Y:</label><input type="text" id="posY"/><br/>
-				<label for="sizeX">W:</label><input type="text" id="sizeX"/>
-				<label for="sizeY">H:</label><input type="text" id="sizeY"/>
+				<label for="posX">X:</label><input type="text" id="posX" onchange="changePosX(this.value)"/>
+				<label for="posY">Y:</label><input type="text" id="posY" onchange="changePosY(this.value)"/><br/>
+				<label for="sizeX">W:</label><input type="text" id="sizeX" onchange="changeSizeX(this.value)"/>
+				<label for="sizeY">H:</label><input type="text" id="sizeY" onchange="changeSizeY(this.value)"/>
 			</div>
 			<div class="color">
 				<label for="bgColor">Background:</label><input type="color" id="bgColor"/><br/>
