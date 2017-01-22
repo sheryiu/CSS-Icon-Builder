@@ -33,6 +33,7 @@
 	var currClickAnchor = null;
 	// x and y moved
 	var xDelta = 0, yDelta = 0, wDelta = 0, hDelta = 0;
+	// store temporary data
 	var movingData;
 
 	var WIDTH = 500;
@@ -77,9 +78,9 @@
 			context.fillStyle = "#FFF";
 			context.beginPath();
 			for (var anchor in currAnchorPos) {
-				context.rect(RULER_SIZE+currAnchorPos[anchor][0]+xDelta+(anchor.indexOf("e")>=0?wDelta:0)+((anchor=="n"||anchor=="s")?wDelta/2:0),
-							RULER_SIZE+currAnchorPos[anchor][1]+yDelta,
-							6, 6);
+				context.rect(RULER_SIZE+currAnchorPos[anchor][0]+xDelta + (anchor.indexOf("e")>=0?wDelta:0)+((anchor=="n"||anchor=="s")?wDelta/2:0),
+				RULER_SIZE+currAnchorPos[anchor][1]+yDelta + (anchor.indexOf("s")>=0?hDelta:0)+((anchor=="e"||anchor=="w")?hDelta/2:0),
+				6, 6);
 			}
 			context.fill();
 			context.stroke();
@@ -115,13 +116,13 @@
 				if (context.isPointInPath(RULER_SIZE+x, RULER_SIZE+y)) {
 					currClickShape = "main";
 					currAnchorPos = {"nw":[mainData.position.x-3, mainData.position.y-3],
-									 "n":[mainData.position.x+mainData.size.x/2-3, mainData.position.y-3],
-					 				 "ne":[mainData.position.x+mainData.size.x-3, mainData.position.y-3],
-									 "w":[mainData.position.x-3, mainData.position.y+mainData.size.y/2-3],
-									 "e":[mainData.position.x+mainData.size.x-3, mainData.position.y+mainData.size.y/2-3],
-									 "sw":[mainData.position.x-3, mainData.position.y+mainData.size.y-3],
-									 "s":[mainData.position.x+mainData.size.x/2-3, mainData.position.y+mainData.size.y-3],
-									 "se":[mainData.position.x+mainData.size.x-3, mainData.position.y+mainData.size.y-3]};
+					"n":[mainData.position.x+mainData.size.x/2-3, mainData.position.y-3],
+					"ne":[mainData.position.x+mainData.size.x-3, mainData.position.y-3],
+					"w":[mainData.position.x-3, mainData.position.y+mainData.size.y/2-3],
+					"e":[mainData.position.x+mainData.size.x-3, mainData.position.y+mainData.size.y/2-3],
+					"sw":[mainData.position.x-3, mainData.position.y+mainData.size.y-3],
+					"s":[mainData.position.x+mainData.size.x/2-3, mainData.position.y+mainData.size.y-3],
+					"se":[mainData.position.x+mainData.size.x-3, mainData.position.y+mainData.size.y-3]};
 					xOffset = mainData.position.x - x;
 					yOffset = mainData.position.y - y;
 					movingData = {"position": mainData.position, "size": mainData.size};
@@ -155,9 +156,12 @@
 				iconData.main.size.x += wDelta;
 				document.getElementById("sizeX").value = iconData.main.size.x/WIDTH + "em";
 				document.getElementById("sizeX").disabled = false;
+				iconData.main.size.y += hDelta;
+				document.getElementById("sizeY").value = iconData.main.size.y/WIDTH + "em";
+				document.getElementById("sizeY").disabled = false;
 				for (var anchor in currAnchorPos) {
-					currAnchorPos[anchor][0] += xDelta+(anchor.indexOf("e")>=0?wDelta:0)+((anchor=="n"||anchor=="s")?wDelta/2:0);
-					currAnchorPos[anchor][1] += yDelta;
+					currAnchorPos[anchor][0] += xDelta + (anchor.indexOf("e")>=0?wDelta:0)+((anchor=="n"||anchor=="s")?wDelta/2:0);
+					currAnchorPos[anchor][1] += yDelta + (anchor.indexOf("s")>=0?hDelta:0)+((anchor=="e"||anchor=="w")?hDelta/2:0);
 				}
 			}
 		}
@@ -178,9 +182,40 @@
 		if (clickDown) {
 			if (currClickAnchor != null) {
 				switch (currClickAnchor) {
+					case "n":
+					yDelta = y - yOffset;
+					hDelta = yOffset - y;
+					break;
+					case "ne":
+					wDelta = x - xOffset;
+					yDelta = y - yOffset;
+					hDelta = yOffset - y;
+					break;
+					case "nw":
+					xDelta = x - xOffset;
+					wDelta = xOffset - x;
+					yDelta = y - yOffset;
+					hDelta = yOffset - y;
+					break;
+					case "w":
+					xDelta = x - xOffset;
+					wDelta = xOffset - x;
+					break;
 					case "e":
-						wDelta = x - xOffset;
-						break;
+					wDelta = x - xOffset;
+					break;
+					case "s":
+					hDelta = y - yOffset;
+					break;
+					case "se":
+					wDelta = x - xOffset;
+					hDelta = y - yOffset;
+					break;
+					case "sw":
+					xDelta = x - xOffset;
+					wDelta = xOffset - x;
+					hDelta = y - yOffset;
+					break;
 				}
 			} else if (currClickShape != null) {
 				if (x+xOffset >= 0) {
