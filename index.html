@@ -21,14 +21,18 @@
 		"after":{}
 	};
 
+	// cursor x y
 	var x, y;
+	// x and y from the top left of shape
 	var xOffset, yOffset;
 	var clickDown = false;
 	// 0 = main, 1 = before, 2 = after
 	var currLayer = 0;
 	var currClickShape = null;
 	var currAnchorPos = null;
-	var xDelta = 0, yDelta = 0;
+	var currClickAnchor = null;
+	// x and y moved
+	var xDelta = 0, yDelta = 0, wDelta = 0, hDelta = 0;
 	var movingData;
 
 	var WIDTH = 500;
@@ -50,11 +54,6 @@
 
 	function draw() {
 		context.clearRect(RULER_SIZE, RULER_SIZE, WIDTH, HEIGHT);
-		/*if (clickDown) {
-			drawRect(x, y, "#5AE09E");
-		} else {
-			drawRect(xBox, yBox, "#5AE09E");
-		}*/
 
 		drawIconMain();
 		drawCrosshairs();
@@ -69,7 +68,7 @@
 			if (mainData.borderRadius == 0) {
 				context.fillStyle = "#000";
 				context.beginPath();
-				context.rect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x, mainData.size.y);
+				context.rect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x+wDelta, mainData.size.y+hDelta);
 				context.fill();
 			}
 		}
@@ -78,7 +77,9 @@
 			context.fillStyle = "#FFF";
 			context.beginPath();
 			for (var anchor in currAnchorPos) {
-				context.rect(RULER_SIZE+currAnchorPos[anchor][0]+xDelta, RULER_SIZE+currAnchorPos[anchor][1]+yDelta, 6, 6);
+				context.rect(RULER_SIZE+currAnchorPos[anchor][0]+xDelta+(anchor.indexOf("e")>=0?wDelta:0)+((anchor=="n"||anchor=="s")?wDelta/2:0),
+							RULER_SIZE+currAnchorPos[anchor][1]+yDelta,
+							6, 6);
 			}
 			context.fill();
 			context.stroke();
@@ -89,56 +90,84 @@
 
 
 	function mouseDown(e) {
+		x = e.pageX - canvas.offsetLeft - RULER_SIZE;
+		y = e.pageY - canvas.offsetTop - RULER_SIZE;
+
 		clickDown = true;
-		if (currLayer == 0) {
-			var mainData = iconData.main;
-			context.beginPath();
-			context.rect(RULER_SIZE+mainData.position.x, RULER_SIZE+mainData.position.y, mainData.size.x, mainData.size.y);
-			if (context.isPointInPath(e.pageX-canvas.offsetLeft, e.pageY-canvas.offsetTop)) {
-				currClickShape = "main";
-				currAnchorPos = {"tl":[mainData.position.x-3, mainData.position.y-3],
-								 "t":[mainData.position.x+mainData.size.x/2-3, mainData.position.y-3],
-				 				 "tr":[mainData.position.x+mainData.size.x-3, mainData.position.y-3],
-								 "l":[mainData.position.x-3, mainData.position.y+mainData.size.y/2-3],
-								 "r":[mainData.position.x+mainData.size.x-3, mainData.position.y+mainData.size.y/2-3],
-								 "bl":[mainData.position.x-3, mainData.position.y+mainData.size.y-3],
-								 "b":[mainData.position.x+mainData.size.x/2-3, mainData.position.y+mainData.size.y-3],
-								 "br":[mainData.position.x+mainData.size.x-3, mainData.position.y+mainData.size.y-3]};
-				xOffset = (RULER_SIZE+mainData.position.x) - (e.pageX-canvas.offsetLeft);
-				yOffset = (RULER_SIZE+mainData.position.y) - (e.pageY-canvas.offsetTop);
-				movingData = {"position": mainData.position, "size": mainData.size};
-				document.getElementById("posX").value = mainData.position.x/WIDTH + "em";
-				document.getElementById("posX").disabled = true;
-				document.getElementById("posY").value = mainData.position.y/HEIGHT + "em";
-				document.getElementById("posY").disabled = true;
-			} else {
-				currClickShape = null;
-				currAnchorPos = null;
-				xOffset = 0;
-				yOffset = 0;
+		for (var anchor in currAnchorPos) {
+			if (x-currAnchorPos[anchor][0] <= 6 && x-currAnchorPos[anchor][0] >= 0 && y-currAnchorPos[anchor][1] <= 6 && y-currAnchorPos[anchor][1] >= 0) {
+				currClickAnchor = anchor;
+				// use to store click down position
+				xOffset = x;
+				yOffset = y;
+				// TODO move to mousemove (when hover)
+				document.body.style.cursor = anchor+"-resize";
+				document.getElementById("sizeX").disabled = true;
+				document.getElementById("sizeY").disabled = true;
 			}
 		}
-		mouseMove(e);
+
+		if (currClickAnchor == null) {
+			if (currLayer == 0) {
+				var mainData = iconData.main;
+				context.beginPath();
+				context.rect(RULER_SIZE+mainData.position.x, RULER_SIZE+mainData.position.y, mainData.size.x, mainData.size.y);
+				if (context.isPointInPath(RULER_SIZE+x, RULER_SIZE+y)) {
+					currClickShape = "main";
+					currAnchorPos = {"nw":[mainData.position.x-3, mainData.position.y-3],
+									 "n":[mainData.position.x+mainData.size.x/2-3, mainData.position.y-3],
+					 				 "ne":[mainData.position.x+mainData.size.x-3, mainData.position.y-3],
+									 "w":[mainData.position.x-3, mainData.position.y+mainData.size.y/2-3],
+									 "e":[mainData.position.x+mainData.size.x-3, mainData.position.y+mainData.size.y/2-3],
+									 "sw":[mainData.position.x-3, mainData.position.y+mainData.size.y-3],
+									 "s":[mainData.position.x+mainData.size.x/2-3, mainData.position.y+mainData.size.y-3],
+									 "se":[mainData.position.x+mainData.size.x-3, mainData.position.y+mainData.size.y-3]};
+					xOffset = mainData.position.x - x;
+					yOffset = mainData.position.y - y;
+					movingData = {"position": mainData.position, "size": mainData.size};
+					document.getElementById("posX").value = mainData.position.x/WIDTH + "em";
+					document.getElementById("posX").disabled = true;
+					document.getElementById("posY").value = mainData.position.y/HEIGHT + "em";
+					document.getElementById("posY").disabled = true;
+					document.getElementById("sizeX").value = iconData.main.size.x/WIDTH + "em";
+					document.getElementById("sizeY").value = iconData.main.size.y/HEIGHT + "em";
+				} else {
+					currClickShape = null;
+					currAnchorPos = null;
+					xOffset = 0;
+					yOffset = 0;
+				}
+			}
+		}
 	}
 
 	function mouseUp(e) {
 		clickDown = false;
 		if (currLayer == 0) {
 			if (currClickShape == "main") {
+				// Apply delta to data
 				iconData.main.position.x += xDelta;
 				document.getElementById("posX").value = iconData.main.position.x/WIDTH + "em";
 				document.getElementById("posX").disabled = false;
 				iconData.main.position.y += yDelta;
 				document.getElementById("posY").value = iconData.main.position.y/HEIGHT + "em";
 				document.getElementById("posY").disabled = false;
+				iconData.main.size.x += wDelta;
+				document.getElementById("sizeX").value = iconData.main.size.x/WIDTH + "em";
+				document.getElementById("sizeX").disabled = false;
 				for (var anchor in currAnchorPos) {
-					currAnchorPos[anchor][0] += xDelta;
+					currAnchorPos[anchor][0] += xDelta+(anchor.indexOf("e")>=0?wDelta:0)+((anchor=="n"||anchor=="s")?wDelta/2:0);
 					currAnchorPos[anchor][1] += yDelta;
 				}
-				xDelta = 0;
-				yDelta = 0;
 			}
 		}
+		xDelta = 0;
+		yDelta = 0;
+		wDelta = 0;
+		hDelta = 0;
+		xOffset = 0;
+		yOffset = 0;
+		currClickAnchor = null;
 	}
 
 	function mouseMove(e) {
@@ -147,7 +176,13 @@
 
 		//TODO fixed when out of border (should allow)
 		if (clickDown) {
-			if (currClickShape != null) {
+			if (currClickAnchor != null) {
+				switch (currClickAnchor) {
+					case "e":
+						wDelta = x - xOffset;
+						break;
+				}
+			} else if (currClickShape != null) {
 				if (x+xOffset >= 0) {
 					xDelta = x+xOffset - movingData.position.x;
 				}
