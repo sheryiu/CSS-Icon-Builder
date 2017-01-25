@@ -77,7 +77,7 @@
 				if (mainData.borderRadiusType == "em") {
 					drawRoundedRect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x+wDelta, mainData.size.y+hDelta, mainData.borderRadius.x, mainData.borderRadius.y);
 				} else if (mainData.borderRadiusType == "%") {
-					drawRoundedRect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x+wDelta, mainData.size.y+hDelta, mainData.borderRadius.x+mainData.size.x+wDelta, mainData.borderRadius.y*mainData.size.y+hDelta);
+					drawRoundedRect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x+wDelta, mainData.size.y+hDelta, mainData.borderRadius.x*(mainData.size.x+wDelta), mainData.borderRadius.y*(mainData.size.y+hDelta));
 				}
 			}
 		}
