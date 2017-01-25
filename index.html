@@ -5,6 +5,7 @@
 	<link rel="stylesheet" href="./style/icons.css" type="text/css"/>
 	<link rel="stylesheet" href="./style/input.css" type="text/css"/>
 	<script type="text/javascript" src="./script/ruleCross.js"></script>
+	<script type="text/javascript" src="./script/drawShapes.js"></script>
 	<script type="text/javascript">
 	var canvas;
 	var context;
@@ -13,9 +14,10 @@
 	var iconData = {
 		"main":{
 			"baseShape":"rectangle",
-			"borderRadius":0,
+			"borderRadius":{"x":0, "y":0},
+			"borderRadiusType":null,
 			"position": {"x":20, "y":20},
-			"size": {"x":200, "y":100}
+			"size": {"x":200, "y":200}
 		},
 		"before":{},
 		"after":{}
@@ -66,11 +68,17 @@
 	function drawIconMain() {
 		var mainData = iconData.main;
 		if (mainData.baseShape == "rectangle") {
-			if (mainData.borderRadius == 0) {
-				context.fillStyle = "#000";
+			context.fillStyle = "#000";
+			if (mainData.borderRadiusType == null) {
 				context.beginPath();
 				context.rect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x+wDelta, mainData.size.y+hDelta);
 				context.fill();
+			} else {
+				if (mainData.borderRadiusType == "em") {
+					drawRoundedRect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x+wDelta, mainData.size.y+hDelta, mainData.borderRadius.x, mainData.borderRadius.y);
+				} else if (mainData.borderRadiusType == "%") {
+					drawRoundedRect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x+wDelta, mainData.size.y+hDelta, mainData.borderRadius.x+mainData.size.x+wDelta, mainData.borderRadius.y*mainData.size.y+hDelta);
+				}
 			}
 		}
 		if (currAnchorPos != null) {
@@ -284,6 +292,28 @@
 		}
 	}
 
+	function changeBRadius(value) {
+		if (value.indexOf("em") >= 0) {
+			value = value.substr(0, value.indexOf("em"));
+			if (currLayer == 0) {
+				if (currClickShape == "main") {
+					iconData.main.borderRadius.x = value*WIDTH;
+					iconData.main.borderRadius.y = value*WIDTH;
+					iconData.main.borderRadiusType = "em";
+				}
+			}
+		} else if (value.indexOf("%") >= 0) {
+			value = value.substr(0, value.indexOf("%"));
+			if (currLayer == 0) {
+				if (currClickShape == "main") {
+					iconData.main.borderRadius.x = value/100;
+					iconData.main.borderRadius.y = value/100;
+					iconData.main.borderRadiusType = "%";
+				}
+			}
+		}
+	}
+
 	</script>
 </head>
 
@@ -323,6 +353,9 @@
 				<label for="posY">Y:</label><input type="text" id="posY" onchange="changePosY(this.value)"/><br/>
 				<label for="sizeX">W:</label><input type="text" id="sizeX" onchange="changeSizeX(this.value)"/>
 				<label for="sizeY">H:</label><input type="text" id="sizeY" onchange="changeSizeY(this.value)"/>
+			</div>
+			<div id="rectangle">
+				<label for="bRadius">Border Radius:</label><input type="text" id="bRadius" onchange="changeBRadius(this.value)"/>
 			</div>
 			<div class="color">
 				<label for="bgColor">Background:</label><input type="color" id="bgColor"/><br/>
