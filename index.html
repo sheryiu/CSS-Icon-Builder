@@ -14,7 +14,7 @@
 	var iconData = {
 		"main":{
 			"baseShape":"rectangle",
-			"borderRadius":{"x":0, "y":0},
+			"borderRadius":0,
 			"borderRadiusType":null,
 			"position": {"x":20, "y":20},
 			"size": {"x":200, "y":200}
@@ -75,9 +75,9 @@
 				context.fill();
 			} else {
 				if (mainData.borderRadiusType == "em") {
-					drawRoundedRect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x+wDelta, mainData.size.y+hDelta, mainData.borderRadius.x, mainData.borderRadius.y);
+					drawRoundedRect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x+wDelta, mainData.size.y+hDelta, mainData.borderRadius, mainData.borderRadius);
 				} else if (mainData.borderRadiusType == "%") {
-					drawRoundedRect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x+wDelta, mainData.size.y+hDelta, mainData.borderRadius.x*(mainData.size.x+wDelta), mainData.borderRadius.y*(mainData.size.y+hDelta));
+					drawRoundedRect(RULER_SIZE+mainData.position.x+xDelta, RULER_SIZE+mainData.position.y+yDelta, mainData.size.x+wDelta, mainData.size.y+hDelta, mainData.borderRadius*(mainData.size.x+wDelta), mainData.borderRadius*(mainData.size.y+hDelta));
 				}
 			}
 		}
@@ -140,6 +140,7 @@
 					document.getElementById("posY").disabled = true;
 					document.getElementById("sizeX").value = iconData.main.size.x/WIDTH + "em";
 					document.getElementById("sizeY").value = iconData.main.size.y/HEIGHT + "em";
+					document.getElementById("bRadius").value = (iconData.main.borderRadiusType=="%"?iconData.main.borderRadius*100:iconData.main.borderRadius/WIDTH) + iconData.main.borderRadiusType;
 				} else {
 					currClickShape = null;
 					currAnchorPos = null;
@@ -149,6 +150,7 @@
 					document.getElementById("posY").value = "";
 					document.getElementById("sizeX").value = "";
 					document.getElementById("sizeY").value = "";
+					document.getElementById("bRadius").value = "";
 				}
 			}
 		}
@@ -241,6 +243,7 @@
 	}
 
 	function mouseOut(e) {
+		// TODO fix mouseout behaviour
 		clickDown = false;
 		x = 0;
 		y = 0;
@@ -293,12 +296,12 @@
 	}
 
 	function changeBRadius(value) {
+		// TODO add individual corner
 		if (value.indexOf("em") >= 0) {
 			value = value.substr(0, value.indexOf("em"));
 			if (currLayer == 0) {
 				if (currClickShape == "main") {
-					iconData.main.borderRadius.x = value*WIDTH;
-					iconData.main.borderRadius.y = value*WIDTH;
+					iconData.main.borderRadius = value*WIDTH;
 					iconData.main.borderRadiusType = "em";
 				}
 			}
@@ -306,8 +309,7 @@
 			value = value.substr(0, value.indexOf("%"));
 			if (currLayer == 0) {
 				if (currClickShape == "main") {
-					iconData.main.borderRadius.x = value/100;
-					iconData.main.borderRadius.y = value/100;
+					iconData.main.borderRadius = value/100;
 					iconData.main.borderRadiusType = "%";
 				}
 			}
