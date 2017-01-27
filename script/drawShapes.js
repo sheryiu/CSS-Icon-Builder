@@ -1,8 +1,21 @@
 function drawRoundedRect(x, y, sizeX, sizeY, xRadius, yRadius) {
+	// if using %, xRadius != yRadius
+	// if using em, xRadius == yRadius
 	if (xRadius != yRadius) {
 		radiusRatio = yRadius/xRadius;
 	} else {
 		radiusRatio = 0;
+	}
+
+	// prevent radius going over width/2 or height/2
+	if (radiusRatio) {
+		if (xRadius > Math.min(sizeX, sizeY)/2)
+		xRadius = Math.min(sizeX, sizeY)/2;
+	} else {
+		if (xRadius > sizeX/2)
+		xRadius = sizeX/2;
+		if (yRadius > sizeY/2)
+		yRadius = sizeY/2;
 	}
 
 	context.beginPath();
@@ -47,7 +60,7 @@ function drawRoundedRect(x, y, sizeX, sizeY, xRadius, yRadius) {
 		context.arcTo(x, (y+sizeY)*(1/radiusRatio), x, (y+sizeY-yRadius)*(1/radiusRatio), xRadius);
 		context.restore();
 	} else {
-		context.arcTo(x, y+sizeY, x, y+sizeY-yRadius, yRadius);
+		context.arcTo(x, y+sizeY, x, y+sizeY-yRadius, xRadius);
 	}
 	context.fill();
 }
