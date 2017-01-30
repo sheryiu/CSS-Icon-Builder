@@ -86,8 +86,8 @@
 			context.fillStyle = "#FFF";
 			context.beginPath();
 			for (var anchor in currAnchorPos) {
-				context.rect(RULER_SIZE+currAnchorPos[anchor][0]+xDelta + (anchor.indexOf("e")>=0?wDelta:0)+((anchor=="n"||anchor=="s")?wDelta/2:0),
-				RULER_SIZE+currAnchorPos[anchor][1]+yDelta + (anchor.indexOf("s")>=0?hDelta:0)+((anchor=="e"||anchor=="w")?hDelta/2:0),
+				context.rect(RULER_SIZE+currAnchorPos[anchor][0]+xDelta + (anchor.indexOf("r")>=0?wDelta:0)+((anchor=="t"||anchor=="b")?wDelta/2:0),
+				RULER_SIZE+currAnchorPos[anchor][1]+yDelta + (anchor.indexOf("b")>=0?hDelta:0)+((anchor=="l"||anchor=="r")?hDelta/2:0),
 				6, 6);
 			}
 			context.fill();
@@ -106,6 +106,7 @@
 		for (var anchor in currAnchorPos) {
 			if (x-currAnchorPos[anchor][0] <= 6 && x-currAnchorPos[anchor][0] >= 0 && y-currAnchorPos[anchor][1] <= 6 && y-currAnchorPos[anchor][1] >= 0) {
 				currClickAnchor = anchor;
+				console.log(currClickAnchor);
 				// use to store click down position
 				xOffset = x;
 				yOffset = y;
@@ -181,8 +182,8 @@
 				document.getElementById("sizeY").value = iconData.main.size.y/WIDTH + "em";
 				document.getElementById("sizeY").disabled = false;
 				for (var anchor in currAnchorPos) {
-					currAnchorPos[anchor][0] += xDelta + (anchor.indexOf("e")>=0?wDelta:0)+((anchor=="n"||anchor=="s")?wDelta/2:0);
-					currAnchorPos[anchor][1] += yDelta + (anchor.indexOf("s")>=0?hDelta:0)+((anchor=="e"||anchor=="w")?hDelta/2:0);
+					currAnchorPos[anchor][0] += xDelta + (anchor.indexOf("r")>=0?wDelta:0)+((anchor=="t"||anchor=="b")?wDelta/2:0);
+					currAnchorPos[anchor][1] += yDelta + (anchor.indexOf("b")>=0?hDelta:0)+((anchor=="l"||anchor=="r")?hDelta/2:0);
 				}
 			}
 		}
@@ -214,36 +215,36 @@
 		if (clickDown) {
 			if (currClickAnchor != null) {
 				switch (currClickAnchor) {
-					case "n":
+					case "t":
 					yDelta = y - yOffset;
 					hDelta = yOffset - y;
 					break;
-					case "ne":
+					case "tr":
 					wDelta = x - xOffset;
 					yDelta = y - yOffset;
 					hDelta = yOffset - y;
 					break;
-					case "nw":
+					case "tl":
 					xDelta = x - xOffset;
 					wDelta = xOffset - x;
 					yDelta = y - yOffset;
 					hDelta = yOffset - y;
 					break;
-					case "w":
+					case "l":
 					xDelta = x - xOffset;
 					wDelta = xOffset - x;
 					break;
-					case "e":
+					case "r":
 					wDelta = x - xOffset;
 					break;
-					case "s":
+					case "b":
 					hDelta = y - yOffset;
 					break;
-					case "se":
+					case "br":
 					wDelta = x - xOffset;
 					hDelta = y - yOffset;
 					break;
-					case "sw":
+					case "bl":
 					xDelta = x - xOffset;
 					wDelta = xOffset - x;
 					hDelta = y - yOffset;
