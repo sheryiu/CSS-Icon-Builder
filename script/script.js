@@ -3,13 +3,7 @@ var context;
 var animationID;
 
 var iconData = {
-	"main":{
-		"baseShape":"rectangle",
-		"borderRadius":0,
-		"borderRadiusType":null,
-		"position": {"x":20, "y":20},
-		"size": {"x":200, "y":200}
-	},
+	"main":{},
 	"before":{},
 	"after":{}
 };
